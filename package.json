@@ -5,9 +5,10 @@
     "dev": "vercel dev",
     "start": "vercel start"
   },
-  "dependencies": {
-    "vcards-js": "^2.10.0"
-  },
+"dependencies": {
+  "@vercel/kv": "^0.2.0",
+  "vcards-js": "^2.10.0"
+}
   "devDependencies": {
     "@vercel/node": "^2.15.3",
     "vercel": "^28.16.11"
