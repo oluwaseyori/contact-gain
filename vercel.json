@@ -3,13 +3,7 @@
   "builds": [
     {
       "src": "api/*.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "includeFiles": [
-          "data/contacts.json"
-        ]
-      }
+      "use": "@vercel/node"
     },
     {
       "src": "public/**",
@@ -19,26 +13,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
-      }
-    },
-    {
-      "src": "/export",
-      "dest": "/api/export.js",
-      "headers": {
-        "Cache-Control": "public, max-age=3600"
-      }
+      "dest": "/api/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/public/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
