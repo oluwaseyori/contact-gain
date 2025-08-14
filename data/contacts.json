@@ -1,5 +1,5 @@
 {
-  "count": 73,
+  "count": 74,
   "contacts": [
     {
       "id": "1755107207612",
@@ -438,6 +438,12 @@
       "fullName": "Splendy TV",
       "number": "+23408083662263",
       "timestamp": "2025-08-14T18:44:27.637Z"
+    },
+    {
+      "id": "1755197683677",
+      "fullName": "Lord rivals",
+      "number": "+2347082156077",
+      "timestamp": "2025-08-14T18:54:43.677Z"
     }
   ]
 }
