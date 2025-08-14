@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const vCardsJS = require('vcards-js');
+const { kv } = require('@vercel/kv');
 
 const DB_PATH = path.join(process.cwd(), 'data', 'contacts.json');
 
@@ -17,30 +18,15 @@ async function initDB() {
 }
 
 async function loadContacts() {
-  try {
-    const data = await fs.readFile(DB_PATH, 'utf8');
-    return JSON.parse(data);
-  } catch (e) {
-    console.error('DB read error:', e);
-    return { count: 0, contacts: [] };
-  }
+  const data = await kv.get('contacts');
+  return data || { count: 0, contacts: [] };
 }
 
-// In your /api/contacts.js, replace the saveContacts function with:
 async function saveContacts(data) {
-  try {
-    // Create data directory if it doesn't exist
-    await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-    await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2));
-    console.log('Successfully saved contacts');
-    return true;
-  } catch (e) {
-    console.error('SAVE ERROR:', e);
-    console.error('Full DB_PATH:', DB_PATH);
-    console.error('Data attempting to save:', data);
-    return false;
-  }
+  await kv.set('contacts', JSON.stringify(data));
+  return true;
 }
+
 function normalizePhoneNumber(number) {
   return number.replace(/\D/g, '');
 }
