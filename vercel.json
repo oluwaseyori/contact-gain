@@ -3,7 +3,11 @@
   "builds": [
     {
       "src": "api/*.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { 
+        "includeFiles": ["data/**"],
+        "maxLambdaSize": "15mb"
+      }
     },
     {
       "src": "public/**",
@@ -13,7 +17,10 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/api/$1",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     },
     {
       "src": "/(.*)",
