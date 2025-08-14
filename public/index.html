@@ -79,14 +79,17 @@
     .ios-btn { background: #007AFF; color: white; border-color: #007AFF; }
 
     .row { display: grid; grid-template-columns: 1fr 2fr; gap: .8rem; }
+
+    /* Center the action buttons */
     .actions {
       display: flex;
       gap: .8rem;
       flex-wrap: wrap;
-      justify-content: center; /* center the buttons */
+      justify-content: center;
       align-items: center;
       margin-top: 1rem;
     }
+
     .muted { color: var(--muted); font-size: 0.9rem; }
     .error { color: var(--error); margin: .8rem 0; padding: .5rem; border-radius: 5px; background-color: rgba(255,92,92,0.1); }
     .success { color: var(--accent); margin: .8rem 0; padding: .5rem; border-radius: 5px; background-color: rgba(84,255,84,0.1); }
@@ -123,7 +126,7 @@
 
     /* Neon download button */
     .neon {
-      width: auto; /* let it hug content */
+      width: auto; /* hug content */
       padding: 0.8rem 1rem;
       border-radius: 10px;
       border: 1px solid #00f5ff;
@@ -190,6 +193,7 @@
 
         <div class="actions">
           <button type="submit" class="primary">Save contact</button>
+          <!-- New neon download button -->
           <button type="button" id="downloadBtn" class="neon">Click me to download contacts file</button>
         </div>
       </form>
@@ -201,10 +205,10 @@
     
     <div class="footer">
       <div class="btn-group">
-        <a href="https://wa.me/message/ZYOWAARF76YPD1" target="_blank" rel="noopener">
+        <a href="https://wa.me/message/ZYOWAARF76YPD1" target="_blank">
           <button class="whatsapp">Contact Seyori</button>
         </a>
-        <a href="https://chat.whatsapp.com/BV8pRIskoymEedBXmYMiYr?mode=ac_t" target="_blank" rel="noopener">
+        <a href="https://chat.whatsapp.com/BV8pRIskoymEedBXmYMiYr?mode=ac_t" target="_blank">
           <button class="whatsapp-group">Join Group</button>
         </a>
         <p class="muted">This site was created by Seyori for easy contact sharing. Contact me if you need help.</p>
@@ -215,10 +219,10 @@
       <h3>Need video help using the file?</h3>
       <p class="muted">Use these tutorial videos:</p>
       <div class="video-buttons">
-        <a href="https://files.catbox.moe/jivobd.mp4" target="_blank" rel="noopener">
+        <a href="https://files.catbox.moe/jivobd.mp4" target="_blank">
           <button class="android-btn">Android Tutorial</button>
         </a>
-        <a href="YOUR_CATBOX_IOS_LINK" target="_blank" rel="noopener">
+        <a href="YOUR_CATBOX_IOS_LINK" target="_blank">
           <button class="ios-btn">iPhone Tutorial</button>
         </a>
       </div>
@@ -243,7 +247,7 @@
     // Load contact count
     async function loadContactCount() {
       try {
-        const response = await fetch('/api/contacts');
+        const response = await fetch('/api/contacts.js');
         if (!response.ok) return;
         const data = await response.json();
         contactCount.textContent = data.count || 0;
@@ -256,33 +260,30 @@
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const fullName = document.getElementById('fullName').value.trim();
-      const number = document.getElementById('number').value.trim();
-      const countryCodeRaw = document.getElementById('countryCode').value.trim();
-      const countryCode = countryCodeRaw.replace('+', '');
+      const fullName = document.getElementById('fullName').value;
+      const number = document.getElementById('number').value;
+      const countryCode = document.getElementById('countryCode').value.replace('+', '');
 
       if (!isValidName(fullName)) {
-        showMessage('Name can contain letters, spaces, and basic punctuation (-.,\'"()).', 'error');
+        showMessage('Name can contain letters, spaces, and basic punctuation (-.,\'"())', 'error');
         return;
       }
       if (!isValidPhone(number) || !isValidPhone(countryCode)) {
-        showMessage('Phone numbers must contain only digits.', 'error');
+        showMessage('Phone numbers must contain only digits', 'error');
         return;
       }
 
       try {
-        const response = await fetch('/api/contacts', {
+        const response = await fetch('/api/contacts.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ fullName, number, countryCode })
         });
         
-        const result = await response.json().catch(() => ({}));
+        const result = await response.json();
         if (response.ok) {
           showMessage('Contact saved successfully!', 'success');
           contactForm.reset();
-          // restore default country code
-          document.getElementById('countryCode').value = '+234';
           loadContactCount();
         } else {
           showMessage(result.error || 'Error saving contact', 'error');
@@ -292,19 +293,19 @@
       }
     });
 
-    // Download button: neon glow + download
+    // Neon glow + download on click
     if (downloadBtn) {
       downloadBtn.addEventListener('click', () => {
         downloadBtn.classList.add('glow');
         setTimeout(() => downloadBtn.classList.remove('glow'), 800);
-        window.location.href = '/api/export';
+        window.location.href = '/api/export.js';
       });
     }
 
     // Show status messages
     function showMessage(text, type) {
       messageDiv.innerHTML = `<div class="${type}">${text}</div>`;
-      setTimeout(() => { messageDiv.innerHTML = ''; }, 3000);
+      setTimeout(() => messageDiv.innerHTML = '', 3000);
     }
 
     // Initial load
