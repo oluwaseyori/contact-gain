@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Seyori's contact database</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0d0f10;
+      --fg: #c4f5c4;
+      --muted: #6ee76e;
+      --accent: #54ff54;
+      --border: #1e241e;
+      --input-bg: #0f1410;
+      --error: #ff5c5c;
+      --whatsapp: #25D366;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4fff4;
+        --fg: #0e2a11;
+        --muted: #0f6f1b;
+        --accent: #1a8a1a;
+        --border: #cde9cd;
+        --input-bg: #ffffff;
+        --error: #b30000;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; }
+    h1, h2 { margin: 0 0 1rem 0; }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0));
+      box-shadow: 0 0 15px rgba(84,255,84,0.1);
+    }
+
+    label { display: block; margin: .5rem 0 .3rem; color: var(--muted); }
+    input, button {
+      width: 100%;
+      padding: .8rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--fg);
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(84,255,84,.2);
+    }
+    button {
+      cursor: pointer;
+      margin-top: .8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(84,255,84,0.3);
+    }
+    .primary { background: var(--accent); color: #002b00; border-color: var(--accent); }
+    .whatsapp { background: var(--whatsapp); color: white; border-color: var(--whatsapp); }
+    .whatsapp-group { background: #075E54; color: white; border-color: #075E54; }
+    .android-btn { background: #3DDC84; color: #000; border-color: #3DDC84; }
+    .ios-btn { background: #007AFF; color: white; border-color: #007AFF; }
+
+    .row { display: grid; grid-template-columns: 1fr 2fr; gap: .8rem; }
+    .actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .error { color: var(--error); margin: .8rem 0; padding: .5rem; border-radius: 5px; background-color: rgba(255,92,92,0.1); }
+    .success { color: var(--accent); margin: .8rem 0; padding: .5rem; border-radius: 5px; background-color: rgba(84,255,84,0.1); }
+    
+    .footer { 
+      margin-top: 2rem; 
+      text-align: center; 
+      padding-top: 1.5rem;
+      border-top: 1px dashed var(--border);
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .btn-group a {
+      width: 100%;
+      max-width: 300px;
+    }
+    .video-help {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.05);
+      border-radius: 10px;
+    }
+    .video-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Seyori's contact database</h1>
+      <p class="muted">You only need to save your contact once. Come back later to reload the site and download updated contacts.</p>
+
+      <div id="message"></div>
+
+      <form id="contactForm" autocomplete="off">
+        <div class="row">
+          <div>
+            <label for="countryCode">Country code</label>
+            <input id="countryCode" name="countryCode" placeholder="+234" value="+234" required />
+          </div>
+          <div>
+            <label for="number">Phone number</label>
+            <input id="number" name="number" placeholder="7082703155" required />
+          </div>
+        </div>
+
+        <label for="fullName">Your name</label>
+        <input id="fullName" name="fullName" placeholder="Seyori" required />
+
+        <div class="actions">
+          <button type="submit" class="primary">Save contact</button>
+          <a href="/api/export.js"><button type="button">Download contacts (.vcf)</button></a>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Contacts in database: <span class="accent" id="contactCount">0</span></h2>
+    </div>
+    
+    <div class="footer">
+      <div class="btn-group">
+        <a href="https://wa.me/message/ZYOWAARF76YPD1" target="_blank">
+          <button class="whatsapp">Contact Seyori</button>
+        </a>
+        <a href="https://chat.whatsapp.com/BV8pRIskoymEedBXmYMiYr?mode=ac_t" target="_blank">
+          <button class="whatsapp-group">Join Group</button>
+        </a>
+        <p class="muted">This site was created by Seyori for easy contact sharing. Contact me if you need help.</p>
+      </div>
+    </div>
+    
+    <div class="video-help">
+      <h3>Need video help using the file?</h3>
+      <p class="muted">Use these tutorial videos:</p>
+      <div class="video-buttons">
+        <a href="https://files.catbox.moe/jivobd.mp4" target="_blank">
+          <button class="android-btn">Android Tutorial</button>
+        </a>
+        <a href="YOUR_CATBOX_IOS_LINK" target="_blank">
+          <button class="ios-btn">iPhone Tutorial</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM elements
+    const contactForm = document.getElementById('contactForm');
+    const messageDiv = document.getElementById('message');
+    const contactCount = document.getElementById('contactCount');
+
+    // Validate inputs
+    function isValidName(name) {
+      return /^[a-zA-Z\s\-.,'"()]+$/.test(name);
+    }
+    function isValidPhone(number) {
+      return /^\d+$/.test(number);
+    }
+
+    // Load contact count
+    async function loadContactCount() {
+      try {
+        const response = await fetch('/api/contacts.js');
+        if (!response.ok) return;
+        const data = await response.json();
+        contactCount.textContent = data.count || 0;
+      } catch (error) {
+        console.log('Count update failed silently');
+      }
+    }
+
+    // Handle form submission
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const fullName = document.getElementById('fullName').value;
+      const number = document.getElementById('number').value;
+      const countryCode = document.getElementById('countryCode').value.replace('+', '');
+
+      if (!isValidName(fullName)) {
+        showMessage('Name can contain letters, spaces, and basic punctuation (-.,\'"())', 'error');
+        return;
+      }
+      if (!isValidPhone(number) || !isValidPhone(countryCode)) {
+        showMessage('Phone numbers must contain only digits', 'error');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/contacts.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, number, countryCode })
+        });
+        
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('Contact saved successfully!', 'success');
+          contactForm.reset();
+          loadContactCount();
+        } else {
+          showMessage(result.error || 'Error saving contact', 'error');
+        }
+      } catch (error) {
+        showMessage('Network error. Please try again.', 'error');
+      }
+    });
+
+    // Show status messages
+    function showMessage(text, type) {
+      messageDiv.innerHTML = `<div class="${type}">${text}</div>`;
+      setTimeout(() => messageDiv.innerHTML = '', 3000);
+    }
+
+    // Initial load
+    loadContactCount();
+  </script>
+</body>
+</html>
