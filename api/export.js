@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
 
         const ts = contact.timestamp ? new Date(contact.timestamp) : null;
         const noteDate = ts && !isNaN(ts) ? ts.toLocaleDateString() : '';
-        card.note = `Added to Seyori's contact network${noteDate ? ' on ' + noteDate : ''}`;
+        card.note = `Added to Seyori's contact databse${noteDate ? ' on ' + noteDate : ''}`;
 
         return card.getFormattedString();
       } catch (e) {
