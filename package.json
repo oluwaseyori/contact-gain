@@ -1,21 +1,15 @@
 {
-  "name": "seyori-contact-site",
+  "name": "contact-site",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
-    "dev": "Seyori",
-    "start": "vercel start",
-    "deploy": "vercel deploy --prod"
+    "dev": "vercel dev",
+    "start": "vercel start"
   },
   "dependencies": {
-    "vcards-js": "^2.10.0",
-    "fs-extra": "^11.2.0"
+    "vcards-js": "^2.10.0"
   },
   "devDependencies": {
-    "@vercel/node": "^4.2.4",
-    "vercel": "^32.5.1"
-  },
-  "engines": {
-    "node": ">=18.x"
+    "@vercel/node": "^2.15.3",
+    "vercel": "^28.16.11"
   }
 }
