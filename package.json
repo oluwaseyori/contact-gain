@@ -2,14 +2,12 @@
   "name": "seyori-contact-site",
   "version": "1.0.0",
   "scripts": {
-    "dev": "Seyori",
-    "start": "serve public"
+    "dev": "Seyori"
   },
   "dependencies": {
     "vcards-js": "^2.10.0"
   },
   "devDependencies": {
-    "@vercel/node": "^2.15.3",
-    "serve": "^14.2.0"
+    "@vercel/node": "^2.15.3"
   }
 }
