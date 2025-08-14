@@ -26,16 +26,21 @@ async function loadContacts() {
   }
 }
 
+// In your /api/contacts.js, replace the saveContacts function with:
 async function saveContacts(data) {
   try {
+    // Create data directory if it doesn't exist
+    await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
     await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2));
+    console.log('Successfully saved contacts');
     return true;
   } catch (e) {
-    console.error('DB write error:', e);
+    console.error('SAVE ERROR:', e);
+    console.error('Full DB_PATH:', DB_PATH);
+    console.error('Data attempting to save:', data);
     return false;
   }
 }
-
 function normalizePhoneNumber(number) {
   return number.replace(/\D/g, '');
 }
