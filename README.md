@@ -231,10 +231,13 @@ MIT — do whatever, just keep the license notice.
 
 ## 🙌 Credits
 
-- Seyori: **Creator**
+- Creator: **Seyori**
 - Serverless runtime: **Vercel**  
 - vCard generation: **vcards-js**  
 - Storage: **GitHub Contents API**
 
 If you ship this publicly, star the repo so others can find it!
-You can contact me via [Telegram](t.me/s3yori)
+
+---
+
+## Any other questions or problems ? You can contact me via [Telegram](https://t.me/s3yori)
